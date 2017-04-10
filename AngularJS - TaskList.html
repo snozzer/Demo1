@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<style>
+	.mainButton{
+			margin-top:10px;
+		}
+	.listitem{
+			margin-top:3px
+		}
+	.listbutton{
+			margin-left:5px;
+		}
+</style>
+<body>
+
+<script>
+var app = angular.module("taskList", []); 
+app.controller("myCtrl", function($scope) {
+    $scope.task = [];
+	$scope.editMode = false;
+	 
+	$scope.addItem = function() {
+		$scope.editMode = false;
+		
+		 if (!$scope.addMe) {return;}
+		 
+         if ($scope.task.indexOf($scope.addMe) == -1) {
+            $scope.task.push($scope.addMe);
+			} 
+    };
+	
+	$scope.removeItem = function(x) {
+		$scope.editMode = false;
+        $scope.task.splice(x, 1);
+    };
+	
+
+	
+	$scope.editItem = function (currObj, index) {
+        $scope.editMode = true;
+        $scope.addMe = angular.copy(currObj);
+        $scope.index = index;
+    }
+	
+	$scope.update = function() {   
+        $scope.task[$scope.index] = angular.copy($scope.addMe);
+        $scope.addMe= "";
+    };
+		
+	$scope.addNewTask = function() {
+		$scope.editMode = false;
+	}
+});
+</script>
+
+<div ng-app="taskList" ng-controller="myCtrl">
+  <ul>
+    <li ng-repeat="x in task" class="listitem">
+	{{x}}
+	 <button  ng-click="editItem(x, $index); " class="listbutton">&nbsp; Edit</button>
+     <button  ng-click="removeItem($index)" class="listbutton"> &nbsp; Delete</button>
+	 </li>
+  </ul>
+  
+  <input type="text" ng-model="addMe" >
+  <button ng-click="addItem()" ng-hide="editMode">Add</button>
+  <button ng-click="update()" ng-show="editMode">Update</button>
+ 
+  </br>
+  <button ng-click="addNewTask()"  class="mainButton">Add Task</button> <br/> 
+
+</div>
+
+
+
+</body>
+</html>
